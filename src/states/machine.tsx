@@ -7,11 +7,13 @@ export const machine = createMachine({
     count: 1,
     data: undefined,
     error: undefined as string | undefined,
-    random: 0
+    random: 0,
   },
   states: {
     idle: {
-        exit: () => { console.log('leaving idle') },
+      exit: () => {
+        console.log('leaving idle')
+      },
       on: {
         START: {
           target: 'loading',
@@ -24,11 +26,12 @@ export const machine = createMachine({
       },
     },
     loading: {
-        entry:assign({
-            random: () =>{
-                console.log('entering loading');
-                return Math.random()},
-        }),
+      entry: assign({
+        random: () => {
+          console.log('entering loading')
+          return Math.random()
+        },
+      }),
       invoke: {
         src: 'fetchData',
         input: ({ context }) => context,
@@ -43,13 +46,14 @@ export const machine = createMachine({
           target: 'idle',
           actions: assign({
             error: ({ event }) => {
-              const err = (event as { data?: unknown; error?: unknown }).data ?? 
-                         (event as { data?: unknown; error?: unknown }).error ?? 
-                         event;
+              const err =
+                (event as { data?: unknown; error?: unknown }).data ??
+                (event as { data?: unknown; error?: unknown }).error ??
+                event
               if (err instanceof Error) {
-                return err.message;
+                return err.message
               }
-              return typeof err === 'string' ? err : JSON.stringify(err);
+              return typeof err === 'string' ? err : JSON.stringify(err)
             },
           }),
         },

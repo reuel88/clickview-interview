@@ -8,14 +8,16 @@ export function MyComponent() {
     machine.provide({
       actors: {
         fetchData: fromPromise(({ input }) => {
-            // wait 3 seconds to simulate a slow network
-            return new Promise((resolve) => {
-                setTimeout(() => {
-                    resolve(null);
-                }, 3000);
-            }).then(() => { 
-              return fetch(`https://jsonplaceholder.typicode.com/todos/${input.count}`).then((response) => response.json())
-            });
+          // wait 3 seconds to simulate a slow network
+          return new Promise((resolve) => {
+            setTimeout(() => {
+              resolve(null)
+            }, 3000)
+          }).then(() => {
+            return fetch(`https://jsonplaceholder.typicode.com/todos/${input.count}`).then(
+              (response) => response.json(),
+            )
+          })
         }),
       },
     }),
@@ -29,9 +31,15 @@ export function MyComponent() {
 
   return (
     <div>
-        {JSON.stringify(state.context)}
+      {JSON.stringify(state.context)}
 
-      <Button type="button" onClick={() => send({ type: 'START', count: state.context.count + 1, data: undefined, error: undefined })} disabled={!canStart}>
+      <Button
+        type="button"
+        onClick={() =>
+          send({ type: 'START', count: state.context.count + 1, data: undefined, error: undefined })
+        }
+        disabled={!canStart}
+      >
         Start
       </Button>
 
