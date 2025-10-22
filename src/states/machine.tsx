@@ -4,7 +4,7 @@ export const machine = createMachine({
   id: 'test',
   initial: 'idle',
   context: {
-    count: 0,
+    count: 1,
     data: undefined,
     error: undefined as string | undefined,
   },
@@ -14,9 +14,9 @@ export const machine = createMachine({
         START: {
           target: 'loading',
           actions: assign({
-            count: ({ context }) => {
-              return context.count + 1
-            },
+            count: ({ event }) => event.count,
+            data: ({ event }) => event.data,
+            error: ({ event }) => event.error,
           }),
         },
       },

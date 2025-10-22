@@ -8,7 +8,14 @@ export function MyComponent() {
     machine.provide({
       actors: {
         fetchData: fromPromise(({ input }) => {
-          return fetch(`https://jsonplaceholder.typicode.com/todos/${input.count}`).then((response) => response.json())
+            // wait 10 seconds to simulate a slow network
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve(null);
+                }, 10000);
+            }).then(() => { 
+              return fetch(`https://jsonplaceholder.typicode.com/todos/${input.count}`).then((response) => response.json())
+            });
         }),
       },
     }),
@@ -24,7 +31,7 @@ export function MyComponent() {
     <div>
         {JSON.stringify(state.context)}
 
-      <Button type="button" onClick={() => send({ type: 'START' })} disabled={!canStart}>
+      <Button type="button" onClick={() => send({ type: 'START', count: state.context.count + 1, data: undefined, error: undefined })} disabled={!canStart}>
         Start
       </Button>
 
