@@ -51,7 +51,10 @@ export const machine = createMachine({
     running: {
       on: {
         STOP: 'idle',
-        PAUSE: 'paused',
+        PAUSE: {
+          target: 'paused',
+          guard: ({ context }) => context.count % 2 === 0,
+        },
       },
     },
     paused: {

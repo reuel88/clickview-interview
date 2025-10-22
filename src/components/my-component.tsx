@@ -12,7 +12,7 @@ export function MyComponent() {
             return new Promise((resolve) => {
                 setTimeout(() => {
                     resolve(null);
-                }, 10000);
+                }, 3000);
             }).then(() => { 
               return fetch(`https://jsonplaceholder.typicode.com/todos/${input.count}`).then((response) => response.json())
             });
