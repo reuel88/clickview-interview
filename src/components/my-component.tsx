@@ -8,7 +8,7 @@ export function MyComponent() {
     machine.provide({
       actors: {
         fetchData: fromPromise(({ input }) => {
-            // wait 10 seconds to simulate a slow network
+            // wait 3 seconds to simulate a slow network
             return new Promise((resolve) => {
                 setTimeout(() => {
                     resolve(null);
@@ -25,7 +25,7 @@ export function MyComponent() {
   const canStop = state.can({ type: 'STOP' })
   const canPause = state.can({ type: 'PAUSE' })
 
-//   console.log('Current State:', state)
+  console.log('Current State:', state)
 
   return (
     <div>

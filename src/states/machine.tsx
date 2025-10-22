@@ -7,9 +7,11 @@ export const machine = createMachine({
     count: 1,
     data: undefined,
     error: undefined as string | undefined,
+    random: 0
   },
   states: {
     idle: {
+        exit: () => { console.log('leaving idle') },
       on: {
         START: {
           target: 'loading',
@@ -22,6 +24,11 @@ export const machine = createMachine({
       },
     },
     loading: {
+        entry:assign({
+            random: () =>{
+                console.log('entering loading');
+                return Math.random()},
+        }),
       invoke: {
         src: 'fetchData',
         input: ({ context }) => context,
