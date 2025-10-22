@@ -1,5 +1,6 @@
+import type React from 'react'
+import { MyComponent } from './components/my-component.tsx'
 import { Button } from '@/ui/button.tsx'
-import React from 'react'
 
 function App() {
   const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -8,15 +9,14 @@ function App() {
   }
 
   return (
-    <>
-      <div className="flex min-h-screen items-center justify-center">
-        <div className="mx-auto max-w-7xl">
-          <Button type="button" onClick={handleClick}>
-            Click
-          </Button>
-        </div>
+    <div className="flex min-h-screen items-center justify-center">
+      <div className="mx-auto max-w-7xl">
+        <Button type="button" onClick={handleClick}>
+          Click
+        </Button>
+        <MyComponent />
       </div>
-    </>
+    </div>
   )
 }
 
