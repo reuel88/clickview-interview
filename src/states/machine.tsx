@@ -1,8 +1,15 @@
 import { createMachine, assign } from 'xstate'
 
+export const STATES = {
+  IDLE: 'idle',
+  LOADING: 'loading',
+  RUNNING: 'running',
+  PAUSED: 'paused',
+}
+
 export const machine = createMachine({
   id: 'test',
-  initial: 'idle',
+  initial: STATES.IDLE,
   context: {
     count: 1,
     data: undefined,
@@ -10,23 +17,22 @@ export const machine = createMachine({
     random: 0,
   },
   states: {
-    idle: {
+    [STATES.IDLE]: {
       exit: () => {
         console.log('leaving idle')
       },
       on: {
         START: {
-          target: 'loading',
+          target: [STATES.LOADING],
           actions: assign({
-            count: ({ event }) => event.count,
             data: ({ event }) => event.data,
-            error: ({ event }) => event.error,
           }),
         },
       },
     },
-    loading: {
+    [STATES.LOADING]: {
       entry: assign({
+        count: ({ context }) => context.count + 1,
         random: () => {
           console.log('entering loading')
           return Math.random()
@@ -34,16 +40,16 @@ export const machine = createMachine({
       }),
       invoke: {
         src: 'fetchData',
-        input: ({ context }) => context,
+        input: ({ event }) => ({ payload: event.payload }),
         onDone: {
-          target: 'running',
+          target: STATES.RUNNING,
           actions: assign({
             data: ({ event }) => event.output,
             error: undefined,
           }),
         },
         onError: {
-          target: 'idle',
+          target: STATES.IDLE,
           actions: assign({
             error: ({ event }) => {
               const err =
@@ -59,19 +65,19 @@ export const machine = createMachine({
         },
       },
     },
-    running: {
+    [STATES.RUNNING]: {
       on: {
-        STOP: 'idle',
+        STOP: STATES.IDLE,
         PAUSE: {
-          target: 'paused',
+          target: STATES.PAUSED,
           guard: ({ context }) => context.count % 2 === 0,
         },
       },
     },
-    paused: {
+    [STATES.PAUSED]: {
       on: {
-        RESUME: 'running',
-        STOP: 'idle',
+        RESUME: STATES.IDLE,
+        STOP: STATES.IDLE,
       },
     },
   },
