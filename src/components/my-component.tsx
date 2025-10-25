@@ -1,5 +1,5 @@
 import { useMachine } from '@xstate/react'
-import { machine } from '../states/machine'
+import { machine } from '../machines/machine.tsx'
 import { Button } from './ui/button'
 import { fromPromise } from 'xstate'
 
